@@ -13,7 +13,7 @@ static const int topbar             = 1;        /* 0 means bottom bar */
 
 static const char *fonts[]          = { 
 	"JetBrainsMono Nerd Font:size=10",
-	"Twemoji Mozilla:style=Regular:pixelsize=20:antialias=true:autohint=true"
+	"Twitter Color Emoji:style=Regular:pixelsize=20:antialias=true:autohint=true"
 };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
 
