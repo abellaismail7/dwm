@@ -148,18 +148,18 @@ static Key keys[] = {
 
 	/*-- Utils --*/
 	{ MODKEY|ShiftMask,				XK_p,			spawn,			SHCMD("import ~/Downloads/shots/screenshot~$(date '+%F~%T').png" ) },
+	{ MODKEY|Mod1Mask,			    XK_k,			spawn,			SHCMD("keytoggle ui" ) },
 	
 	/*-- Mbpro Keys --*/	
 	{0,		XF86XK_AudioLowerVolume,    spawn, 		SHCMD("pamixer --allow-boost -d 5; kill -36 $(pidof slblocks)")},
 	{0,		XF86XK_AudioRaiseVolume,    spawn,		SHCMD("pamixer --allow-boost -i 5; kill -36 $(pidof slblocks)")},
-	{ 0,	XF86XK_MonBrightnessUp,		spawn,		SHCMD("xbacklight -inc 15") },
-	{ 0,	XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 15") },
-	
+	{0,		XF86XK_MonBrightnessUp,		spawn,		SHCMD("xbacklight -inc 15") },
+	{0,		XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 15") },
 	{0,		XF86XK_PowerOff,			spawn,		SHCMD("sysact")},
-	{ 0,	XF86XK_AudioMute,		spawn,		SHCMD("pamixer -t; kill -36 $(pidof slblocks)") },
-	{ 0, 	XF86XK_AudioPrev,		spawn,		SHCMD("mpc prev") },
-	{ 0, 	XF86XK_AudioNext,		spawn,		SHCMD("mpc next") },
-	{ 0, 	XF86XK_AudioPlay,		spawn,		SHCMD("mpc toggle") },
+	{0,		XF86XK_AudioMute,			spawn,		SHCMD("pamixer -t; kill -36 $(pidof slblocks)") },
+	{0, 	XF86XK_AudioPrev,			spawn,		SHCMD("mpc prev") },
+	{0, 	XF86XK_AudioNext,			spawn,		SHCMD("mpc next") },
+	{0, 	XF86XK_AudioPlay,			spawn,		SHCMD("mpc toggle") },
 
 	
 	TAGKEYS(                        XK_1,                      0)
