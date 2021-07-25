@@ -17,17 +17,18 @@ static const char *fonts[]          = {
 };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=10";
 
-static const char col_gray1[]       = "#292f36";
+static const char col_gray1[]       = "#1E222A";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#e0fbfc";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#fcba03";
-static const unsigned int baralpha = 0xf0;
-static const unsigned int borderalpha = OPAQUE;
+static const char col_gray4[]       = "#000000";
+static const char col_cyan[]        = "#ffd297";
+static const char col_border[]      = "#ffffff";
+static const unsigned int baralpha = 0xff;
+static const unsigned int borderalpha = 0xff;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray1, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_cyan,  col_border  },
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
@@ -36,16 +37,18 @@ static const unsigned int alphas[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "", "", "﬏","4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "", "", "﬏","", "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
+	https://dwm.suckless.org/patches/center/dwm-center-6.2.diff *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       3 << 9,       0,           -1 },
+	/* class			instance	title		tags mask	iscentered	isfloating	monitor */
+	{ "PacketTracer7",	NULL,		NULL,		0,			0,			1,			0 },
+	{ "float",			NULL,		NULL,		0,			1,			1,			0 },
+	{ "mpv",			NULL,		NULL,		0,			0,			1,			0 },
+	{ "Firefox",		NULL,		NULL,		3 << 8,		0,			0,			-1 },
 };
 
 /* layout(s) */
@@ -85,15 +88,13 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-l", "9", "-z", "600", "-c", NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 #include<X11/XF86keysym.h>
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_d,	   spawn,          SHCMD("dmenu_run -l 9 -z 600 -c ") },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	
 	
@@ -118,8 +119,8 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,				XK_g,			setlayout,		{.v = &layouts[6]} }, /* grid B*/
 	{ MODKEY,						XK_g,			setlayout,		{.v = &layouts[7]} }, /* grid B H*/
 	
-	{ MODKEY,						XK_c,			setlayout,		{.v = &layouts[8]} }, /* centeredmaster */
-	{ MODKEY|ShiftMask,				XK_c,			setlayout,		{.v = &layouts[9]} }, /* centeredfloatingmaster */
+	{ MODKEY,						XK_e,			setlayout,		{.v = &layouts[8]} }, /* centeredmaster */
+	{ MODKEY|ShiftMask,				XK_e,			setlayout,		{.v = &layouts[9]} }, /* centeredfloatingmaster */
 	
 	{ MODKEY|ShiftMask,				XK_f,			setlayout,		{ .v = &layouts[10]} },
 	
@@ -138,28 +139,12 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	
-	/*-- Gaps --*/
+
 	
 	{ MODKEY,						XK_a,			togglegaps,		{0} },
 	{ MODKEY|ShiftMask,				XK_a,			defaultgaps,	{0} },
 	{ MODKEY,						XK_z,			incrgaps,		{.i = +3 } },
 	{ MODKEY,						XK_x,			incrgaps,		{.i = -3 } },
-
-	/*-- Utils --*/
-	{ MODKEY|ShiftMask,				XK_p,			spawn,			SHCMD("import ~/Downloads/shots/screenshot~$(date '+%F~%T').png" ) },
-	{ MODKEY|Mod1Mask,			    XK_k,			spawn,			SHCMD("keytoggle ui" ) },
-	
-	/*-- Mbpro Keys --*/	
-	{0,		XF86XK_AudioLowerVolume,    spawn, 		SHCMD("pamixer --allow-boost -d 5; kill -36 $(pidof slblocks)")},
-	{0,		XF86XK_AudioRaiseVolume,    spawn,		SHCMD("pamixer --allow-boost -i 5; kill -36 $(pidof slblocks)")},
-	{0,		XF86XK_MonBrightnessUp,		spawn,		SHCMD("xbacklight -inc 15") },
-	{0,		XF86XK_MonBrightnessDown,	spawn,		SHCMD("xbacklight -dec 15") },
-	{0,		XF86XK_PowerOff,			spawn,		SHCMD("sysact")},
-	{0,		XF86XK_AudioMute,			spawn,		SHCMD("pamixer -t; kill -36 $(pidof slblocks)") },
-	{0, 	XF86XK_AudioPrev,			spawn,		SHCMD("mpc prev") },
-	{0, 	XF86XK_AudioNext,			spawn,		SHCMD("mpc next") },
-	{0, 	XF86XK_AudioPlay,			spawn,		SHCMD("mpc toggle") },
 
 	
 	TAGKEYS(                        XK_1,                      0)
@@ -173,7 +158,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	
 	{ MODKEY,			            XK_q,      killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_q,      spawn,           SHCMD("sysact") },
 };
 
 /* button definitions */
